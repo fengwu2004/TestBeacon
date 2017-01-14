@@ -13,7 +13,22 @@
 		2C2B80AE1E2A27E300455182 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C2B80AC1E2A27E300455182 /* Main.storyboard */; };
 		2C2B80B01E2A27E300455182 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C2B80AF1E2A27E300455182 /* Assets.xcassets */; };
 		2C2B80B31E2A27E300455182 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C2B80B11E2A27E300455182 /* LaunchScreen.storyboard */; };
+		2C2B80BF1E2A29F900455182 /* IndoorunSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2C2B80BE1E2A29F900455182 /* IndoorunSDK.framework */; };
+		2C2B80C11E2A2A6300455182 /* IndoorunSDK.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2C2B80BE1E2A29F900455182 /* IndoorunSDK.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2C2B80C01E2A2A5A00455182 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				2C2B80C11E2A2A6300455182 /* IndoorunSDK.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2C2B80A01E2A27E300455182 /* TestBeacon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestBeacon.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -26,6 +41,7 @@
 		2C2B80AF1E2A27E300455182 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2C2B80B21E2A27E300455182 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2C2B80B41E2A27E300455182 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2C2B80BE1E2A29F900455182 /* IndoorunSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IndoorunSDK.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -33,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C2B80BF1E2A29F900455182 /* IndoorunSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +59,7 @@
 		2C2B80971E2A27E300455182 = {
 			isa = PBXGroup;
 			children = (
+				2C2B80BE1E2A29F900455182 /* IndoorunSDK.framework */,
 				2C2B80A21E2A27E300455182 /* TestBeacon */,
 				2C2B80A11E2A27E300455182 /* Products */,
 			);
@@ -89,6 +107,7 @@
 				2C2B809C1E2A27E300455182 /* Sources */,
 				2C2B809D1E2A27E300455182 /* Frameworks */,
 				2C2B809E1E2A27E300455182 /* Resources */,
+				2C2B80C01E2A2A5A00455182 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -272,9 +291,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 6T39E5QM8Q;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = TestBeacon/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yellfun.TestBeacon;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yellfun.EnCars;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -284,9 +307,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 6T39E5QM8Q;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = TestBeacon/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.yellfun.TestBeacon;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yellfun.EnCars;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -310,6 +337,7 @@
 				2C2B80B91E2A27E300455182 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

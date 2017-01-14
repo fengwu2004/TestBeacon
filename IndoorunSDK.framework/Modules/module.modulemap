@@ -1,0 +1,6 @@
+framework module IndoorunSDK {
+  umbrella header "IndoorunSDK.h"
+
+  export *
+  module * { export * }
+}
