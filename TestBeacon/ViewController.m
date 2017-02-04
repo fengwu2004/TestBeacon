@@ -8,19 +8,15 @@
 
 #import "ViewController.h"
 #import <IndoorunSDK/IndoorunSDK.h>
+#import <MessageUI/MessageUI.h>
 
-@interface ViewController ()<IDRBaseLocationServerDelegate, UITextViewDelegate>
+@interface ViewController ()<IDRBaseLocationServerDelegate, UITextViewDelegate, MFMailComposeViewControllerDelegate>
 
 @property (nonatomic) IDRBaseLocationServer *baseLocator;
-@property (nonatomic, copy) NSString *major;
-@property (nonatomic, copy) NSString *minor;
 @property (nonatomic, copy) NSString *beaconUUID;
-@property (nonatomic, copy) NSString *testCount;
+@property (nonatomic, assign) NSInteger testCount;
 
-@property (nonatomic) IBOutlet UITextView *ibMajor;
-@property (nonatomic) IBOutlet UITextView *ibMinor;
-@property (nonatomic) IBOutlet UITextView *ibTestCount;
-@property (nonatomic) IBOutlet UILabel *ibUUID;
+@property (nonatomic) IBOutlet UITextView *ibUUID;
 @property (nonatomic) IBOutlet UIButton *ibStart;
 @property (nonatomic) IBOutlet UIButton *ibEnd;
 
@@ -32,30 +28,16 @@
     
     [super viewDidLoad];
     
-    self.beaconUUID = @"FDA50693-A4E2-4FB1-AFCF-C6EB07647825";
+    self.beaconUUID = @"AB8190D5-D11E-4941-ACC4-42F30510B408";
     
-    self.testCount = @"0";
-    
-    self.major = @"0";
-    
-    self.minor = @"0";
+    self.testCount = 0;
     
     [_ibUUID setText:self.beaconUUID];
-    
-    [_ibTestCount setText:self.testCount];
-    
-    [_ibMajor setText:self.major];
-    
-    [_ibMinor setText:self.minor];
 }
 
 - (void)startCollect {
     
-    _major = _ibMajor.text;
-    
-    _minor = _ibMinor.text;
-    
-    _testCount = _ibTestCount.text;
+    ++_testCount;
     
     [_ibStart setEnabled:NO];
     
@@ -66,7 +48,7 @@
     
     [[IDRLogManager sharedInstance] log1:@"开始记录"];
     
-    [[IDRLogManager sharedInstance] log1:[NSString stringWithFormat:@"测试干扰数据源:%@", _ibTestCount.text]];
+    [[IDRLogManager sharedInstance] log1:[NSString stringWithFormat:@"测试干扰数据源:%d", (int)_testCount]];
     
     [_baseLocator setBeaconUUID:@[_beaconUUID]];
     
@@ -77,11 +59,9 @@
 
 - (IBAction)onSetCountOk:(id)sender {
     
-    [_ibMajor resignFirstResponder];
+    [_ibUUID resignFirstResponder];
     
-    [_ibMinor resignFirstResponder];
-    
-    [_ibTestCount resignFirstResponder];
+    self.beaconUUID = [_ibUUID text];
 }
 
 - (IBAction)onStart:(id)sender {
@@ -104,33 +84,96 @@
 
 - (void)textViewDidEndEditing:(UITextView *)textView {
     
-    [_ibMinor resignFirstResponder];
+    [_ibUUID resignFirstResponder];
     
-    [_ibMinor resignFirstResponder];
-    
-    [_ibTestCount resignFirstResponder];
+    self.beaconUUID = [_ibUUID text];
 }
 
 - (void)didGetRangeBeacons:(NSArray *)beacons {
     
-    NSString *value = @"没有采集到";
-    
-    NSString *mm = [NSString stringWithFormat:@"major:%@minor:%@", _major, _minor];
-    
     for (NSDictionary *data in beacons) {
+        
+        NSString *dis = [data objectForKey:@"distance"];
         
         NSString *mac = [data objectForKey:@"mac"];
         
-        NSString *rssi = [data objectForKey:@"rss"];
+        NSString *rss = [data objectForKey:@"rss"];
         
-        if ([mac isEqualToString:mm]) {
-            
-            value = [rssi copy];
-        }
+        [[IDRLogManager sharedInstance] log1:[NSString stringWithFormat:@"%@, distance:%@, rss:%@", mac, dis, rss]];
     }
     
-    [[IDRLogManager sharedInstance] log1:value];
+    [[IDRLogManager sharedInstance] log1:@"这是一次beacon扫描"];
 }
 
+- (void)sendMail {
+    
+    NSMutableString *mailUrl = [[NSMutableString alloc] init];
+    
+    [mailUrl appendFormat:@"mailto:yanli@yellfun.com, "];
+    
+    [mailUrl appendFormat:@"subject=my email"];
+    
+    [mailUrl appendFormat:@"&body=<b>email</b>body!"];
+    
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:mailUrl] options:@{@"":@""} completionHandler:^(BOOL success) {
+        
+        
+    }];
+}
+
+- (IBAction)onSendClick:(id)sender {
+    
+    [self newSendMail];
+}
+
+- (void)newSendMail {
+    
+    if (![MFMailComposeViewController canSendMail]) {
+        
+        return;
+    }
+    
+    MFMailComposeViewController *vctl = [[MFMailComposeViewController alloc] init];
+    
+    vctl.mailComposeDelegate = self;
+    
+    [vctl setSubject:@"TestBeacon数据"];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    
+    NSString *documentDirectory = [paths objectAtIndex:0];
+    
+    NSString *fileName1 = [NSString stringWithFormat:@"logfile1.log"];
+    
+    NSString *path = [documentDirectory stringByAppendingPathComponent:fileName1];
+    
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    
+    if (data) {
+        
+        [vctl setToRecipients:@[@"yanli@yellfun.com"]];
+        
+        [vctl setCcRecipients:@[@"hexiaofeng@yellfun.com"]];
+        
+        [vctl addAttachmentData:data mimeType:@"" fileName:@"log1"];
+        
+        [self presentViewController:vctl animated:YES completion:nil];
+    }
+}
+
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(nullable NSError *)error {
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    
+    NSString *documentDirectory = [paths objectAtIndex:0];
+    
+    NSString *fileName1 = [NSString stringWithFormat:@"logfile1.log"];
+    
+    NSString *path = [documentDirectory stringByAppendingPathComponent:fileName1];
+    
+    [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+}
 
 @end
