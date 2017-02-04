@@ -150,7 +150,6 @@
     NSData *data = [NSData dataWithContentsOfFile:path];
     
     if (data) {
-        
         [vctl setToRecipients:@[@"yanli@yellfun.com"]];
         
         [vctl setCcRecipients:@[@"hexiaofeng@yellfun.com"]];
